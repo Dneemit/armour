@@ -27,37 +27,44 @@
 
 <script>
 const items = [
+  // HEAD
   { name: "norse helm", place: "head", type1: "medium", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "helmet", place: "head", type1: "medium", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail helmet", place: "head", type1: "heavy", type2: "elemental", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "bhaskarian battle kabuto", place: "head", type1: "heavy", type2: "elemental", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "plate helm", place: "head", type1: "heavy", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 
+  // NECK
   { name: "ring gorget", place: "neck", type1: "medium", type2: "elemental", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail gorget", place: "neck", type1: "heavy", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "plate gorget", place: "neck", type1: "heavy", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 
+  // ARMS
   { name: "ringmail arms", place: "arms", type1: "medium", type2: "elemental", ingot: 4, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
   { name: "chain arms", place: "arms", type1: "medium", type2: "physical", ingot: 4, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail arms", place: "arms", type1: "heavy", type2: "elemental", ingot: 6, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
   { name: "plate arms", place: "arms", type1: "heavy", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 
+  // GLOVES
   { name: "ringmail gloves", place: "gloves", type1: "medium", type2: "elemental", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "chain gloves", place: "gloves", type1: "medium", type2: "physical", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail gloves", place: "gloves", type1: "heavy", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "plate gloves", place: "gloves", type1: "heavy", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 
+  // CHEST
   { name: "ringmail chest", place: "chest", type1: "medium", type2: "elemental", ingot: 8, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "chain chest", place: "chest", type1: "medium", type2: "physical", ingot: 8, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail chest", place: "chest", type1: "heavy", type2: "elemental", ingot: 10, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "female plate chest", place: "chest", type1: "heavy", type2: "physical", ingot: 10, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 
+  // LEGS
   { name: "ringmail legs", place: "legs", type1: "medium", type2: "elemental", ingot: 6, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
   { name: "chain legs", place: "legs", type1: "medium", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "splintmail legs", place: "legs", type1: "heavy", type2: "elemental", ingot: 9, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
   { name: "plate legs", place: "legs", type1: "heavy", type2: "physical", ingot: 9, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 ];
 
-// Populate dropdowns with display names
+// Populate dropdowns
 ["head", "neck", "arms", "gloves", "chest", "legs"].forEach(slot => {
   const select = document.getElementById(slot);
   items.filter(i => i.place === slot).forEach(i => {
