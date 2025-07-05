@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Armour Ingredient Calculator</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 1rem; }
+    select, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
+    .output { margin-top: 2rem; white-space: pre-wrap; background: #f5f5f5; padding: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+<h1>Armour Ingredient Calculator</h1>
+
+<p>Select one item for each slot:</p>
+
+<label>Head: <select id="head"></select></label><br>
+<label>Neck: <select id="neck"></select></label><br>
+<label>Arms: <select id="arms"></select></label><br>
+<label>Gloves: <select id="gloves"></select></label><br>
+<label>Chest: <select id="chest"></select></label><br>
+<label>Legs: <select id="legs"></select></label><br>
+
+<button onclick="calculate()">Calculate Ingredients</button>
+
+<div class="output" id="result"></div>
+
+<script>
+const items = [
+  { name: "norse helm", place: "head", type1: "medium", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "helmet", place: "head", type1: "medium", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail helmet", place: "head", type1: "heavy", type2: "elemental", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "plate helm", place: "head", type1: "heavy", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+
+  { name: "ring gorget", place: "neck", type1: "medium", type2: "elemental", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail gorget", place: "neck", type1: "heavy", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "plate gorget", place: "neck", type1: "heavy", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+
+  { name: "ringmail arms", place: "arms", type1: "medium", type2: "elemental", ingot: 4, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
+  { name: "chain arms", place: "arms", type1: "medium", type2: "physical", ingot: 4, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail arms", place: "arms", type1: "heavy", type2: "elemental", ingot: 6, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
+  { name: "plate arms", place: "arms", type1: "heavy", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+
+  { name: "ringmail gloves", place: "gloves", type1: "medium", type2: "elemental", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "chain gloves", place: "gloves", type1: "medium", type2: "physical", ingot: 3, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail gloves", place: "gloves", type1: "heavy", type2: "elemental", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "plate gloves", place: "gloves", type1: "heavy", type2: "physical", ingot: 4, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+
+  { name: "ringmail chest", place: "chest", type1: "medium", type2: "elemental", ingot: 8, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "chain chest", place: "chest", type1: "medium", type2: "physical", ingot: 8, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail chest", place: "chest", type1: "heavy", type2: "elemental", ingot: 10, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "female plate chest", place: "chest", type1: "heavy", type2: "physical", ingot: 10, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+
+  { name: "ringmail legs", place: "legs", type1: "medium", type2: "elemental", ingot: 6, armor_pad: 2, leather_pad: 1, cloth_pad: 1 },
+  { name: "chain legs", place: "legs", type1: "medium", type2: "physical", ingot: 6, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "splintmail legs", place: "legs", type1: "heavy", type2: "elemental", ingot: 9, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+  { name: "plate legs", place: "legs", type1: "heavy", type2: "physical", ingot: 9, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
+];
+
+// Populate dropdowns
+["head", "neck", "arms", "gloves", "chest", "legs"].forEach(slot => {
+  const select = document.getElementById(slot);
+  items.filter(i => i.place === slot).forEach(i => {
+    const option = document.createElement("option");
+    option.value = i.name;
+    option.textContent = i.name;
+    select.appendChild(option);
+  });
+});
+
+function calculate() {
+  const slots = ["head", "neck", "arms", "gloves", "chest", "legs"];
+  const selected = slots.map(id => document.getElementById(id).value);
+  const selectedItems = items.filter(i => selected.includes(i.name));
+
+  let ingot = 0, armor = 0, leather = 0, cloth = 0;
+  let typeSummary = {};
+
+  selectedItems.forEach(item => {
+    ingot += item.ingot;
+    armor += item.armor_pad;
+    leather += item.leather_pad;
+    cloth += item.cloth_pad;
+
+    const key = `${item.type1} ${item.type2}`;
+    typeSummary[key] = (typeSummary[key] || 0) + 1;
+  });
+
+  const summary = `
+Ingredients needed:
+- Ingots: ${ingot}
+- Armor Pads: ${armor}
+- Leather Pads: ${leather}
+- Cloth Pads: ${cloth}
+
+Armour type mix:
+${Object.entries(typeSummary).map(([k,v]) => `- ${v} × ${k}`).join("\n")}
+  `;
+
+  document.getElementById("result").textContent = summary;
+}
+</script>
+
+</body>
+</html>
