@@ -12,7 +12,6 @@
 <body>
 
 <h1>Armour Ingredient Calculator</h1>
-
 <p>Select one item for each slot:</p>
 
 <label>Head: <select id="head"></select></label><br>
@@ -58,24 +57,25 @@ const items = [
   { name: "plate legs", place: "legs", type1: "heavy", type2: "physical", ingot: 9, armor_pad: 0, leather_pad: 1, cloth_pad: 1 },
 ];
 
-// Populate dropdowns
+// Populate dropdowns with display names
 ["head", "neck", "arms", "gloves", "chest", "legs"].forEach(slot => {
   const select = document.getElementById(slot);
   items.filter(i => i.place === slot).forEach(i => {
     const option = document.createElement("option");
     option.value = i.name;
-    option.textContent = i.name;
+    option.textContent = `${i.name} (${i.type1} ${i.type2})`;
     select.appendChild(option);
   });
 });
 
 function calculate() {
   const slots = ["head", "neck", "arms", "gloves", "chest", "legs"];
-  const selected = slots.map(id => document.getElementById(id).value);
-  const selectedItems = items.filter(i => selected.includes(i.name));
+  const selectedNames = slots.map(id => document.getElementById(id).value);
+  const selectedItems = items.filter(i => selectedNames.includes(i.name));
 
   let ingot = 0, armor = 0, leather = 0, cloth = 0;
   let typeSummary = {};
+  let type1Count = { heavy: 0, medium: 0 };
 
   selectedItems.forEach(item => {
     ingot += item.ingot;
@@ -83,9 +83,14 @@ function calculate() {
     leather += item.leather_pad;
     cloth += item.cloth_pad;
 
-    const key = `${item.type1} ${item.type2}`;
-    typeSummary[key] = (typeSummary[key] || 0) + 1;
+    const combo = `${item.type1} ${item.type2}`;
+    typeSummary[combo] = (typeSummary[combo] || 0) + 1;
+    type1Count[item.type1] = (type1Count[item.type1] || 0) + 1;
   });
+
+  let bonusText = "";
+  if (type1Count.heavy >= 4) bonusText = "\n\n🛡️ Heavy armour set bonuses";
+  else if (type1Count.medium >= 4) bonusText = "\n\n🛡️ Medium armour set bonuses";
 
   const summary = `
 Ingredients needed:
@@ -95,7 +100,7 @@ Ingredients needed:
 - Cloth Pads: ${cloth}
 
 Armour type mix:
-${Object.entries(typeSummary).map(([k,v]) => `- ${v} × ${k}`).join("\n")}
+${Object.entries(typeSummary).map(([k,v]) => `- ${v} × ${k}`).join("\n")}${bonusText}
   `;
 
   document.getElementById("result").textContent = summary;
